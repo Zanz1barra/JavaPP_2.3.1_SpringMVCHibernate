@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>List of users</title>
+        <style>
+            table {
+                border-collapse: collapse;
+                border: 2px solid rgb(140 140 140);
+                font-family: sans-serif;
+                font-size: 0.8rem;
+                letter-spacing: 1px;
+            }
+
+            thead {
+                background-color: rgba(0, 160, 255, 0.4);
+            }
+
+            th,
+            td {
+                border: 1px solid rgb(160 160 160);
+                padding: 8px 10px;
+                text-align: center;
+            }
+
+            tbody > tr:nth-of-type(even) {
+                background-color: rgb(237 238 242);
+            }
+
+            .add_symbol {
+                background-color: transparent;
+                border-color: transparent;
+            }
+
+            .add_symbol:before {
+                content: "+";
+                display: flex; flex-direction: row; align-items: center; justify-content: center;
+                height: 1.5rem;
+                font-size: 2.8rem; text-align: center; color: green;
+            }
+
+            .remove_symbol {
+                background-color: transparent;
+                border-color: transparent;
+            }
+
+            .remove_symbol:before {
+                content: "-";
+                display: flex; flex-direction: row; align-items: center; justify-content: center;
+                height: 1rem;
+                font-size: 2.8rem; text-align: center; color: red;
+            }
+
+            .update_symbol {
+                background-color: transparent;
+                border-color: transparent;
+            }
+
+            .update_symbol:before {
+                content: "/";
+                display: flex; flex-direction: row; align-items: center; justify-content: center;
+                height: 1.5rem; width: 1.5rem;
+                font-size: 2.8rem; text-align: center; color: darkblue;
+            }
+
+            .add_symbol::before {font-family: sans-serif; font-weight: bold;}
+        </style>
+    </head>
+
+    <body>
+        <h1>List of users</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nickname</th>
+                        <th scope="col">Firstname</th>
+                        <th scope="col">Lastname</th>
+                        <th scope="col" colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <div th:if="${beingUpdateUser.id == null}">
+                        <tr>
+                            <form method="post" th:Object="${beingUpdateUser}" th:action="@{/users/add}">
+                                <td>New</td>
+                                <td><input th:field="*{nickname}" type="text"/></td>
+                                <td><input th:field="*{firstname}" type="text"/></td>
+                                <td><input th:field="*{lastname}" type="text"/></td>
+                                <td colspan="2"><button class="add_symbol" type="submit"></button></td>
+                            </form>
+                        </tr>
+                    </div>
+                    <tr th:each="user : ${usersList}">
+                        <div th:if="${(beingUpdateUser.id == null) || (user.id != beingUpdateUser.id)}">
+                            <td th:utext="${user.id}">Id</td>
+                            <td th:utext="${user.nickname}">Nickname</td>
+                            <td th:utext="${user.firstname}">Firstname</td>
+                            <td th:utext="${user.lastname}">Lastname</td>
+                            <td>
+                                <form th:action="@{/users/read_for_update(update_user_id=${user.getId()})}" th:object="${user}" th:method="post">
+                                    <button class="update_symbol"></button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/users/delete(id=${user.getId()})}" th:method="post">
+                                    <button class="remove_symbol"></button>
+                                </form>
+                            </td>
+                        </div>
+                        <div th:if="${(beingUpdateUser.id != null) && (user.id == beingUpdateUser.id)}">
+                            <form method="post" th:Object="${beingUpdateUser}" th:action="@{/users/update(id=${beingUpdateUser.id})}" >
+                                <td th:utext="${beingUpdateUser.id}">Id</td>
+                                <td><input th:field="*{nickname}" type="text"/></td>
+                                <td><input th:field="*{firstname}" type="text"/></td>
+                                <td><input th:field="*{lastname}" type="text"/></td>
+                                <td><button class="add_symbol" type="submit"></button></td>
+                            </form>
+                                <td>
+                                    <form th:action="@{/users/delete(id=${user.getId()})}" th:method="post">
+                                        <button class="remove_symbol"></button>
+                                    </form>
+                                </td>
+                        </div>
+                    </tr>
+                </tbody>
+            </table>
+    </body>
+</html>
