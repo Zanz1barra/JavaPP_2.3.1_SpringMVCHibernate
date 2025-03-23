@@ -100,7 +100,7 @@
                             <td th:utext="${user.firstname}">Firstname</td>
                             <td th:utext="${user.lastname}">Lastname</td>
                             <td>
-                                <form th:action="@{/users/read_for_update(update_user_id=${user.getId()})}" th:object="${user}" th:method="post">
+                                <form th:action="@{/users/read_for_update(update_user_id=${user.getId()})}" th:object="${user}" th:method="get">
                                     <button class="update_symbol"></button>
                                 </form>
                             </td>
