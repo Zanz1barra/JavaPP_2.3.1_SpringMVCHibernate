@@ -13,7 +13,7 @@ import web_hibernate.entity.User;
 import web_hibernate.service.UserService;
 
 @Controller
-@RequestMapping(value = {"/","/users"})
+@RequestMapping(path = {"/","/users"})
 public class UsersController {
 
     private final UserService userService;
@@ -34,7 +34,7 @@ public class UsersController {
             @RequestParam(name = "id") Long id,
             ModelMap modelMap) {
         userService.deleteUserById(id);
-        return "redirect:/users/";
+        return "redirect:..";
     }
 
     @GetMapping(path = {"/update"})
@@ -53,12 +53,12 @@ public class UsersController {
     @PostMapping(path = {"/add"})
     public String addUser(User user, ModelMap modelMap) {
         userService.addUser(user);
-        return "redirect:/users/";
+        return "redirect:..";
     }
 
     @PostMapping(path = {"/update"})
     public String updateUser(User user, ModelMap modelMap) {
         userService.updateUser(user);
-        return "redirect:/users/";
+        return "redirect:..";
     }
 }
