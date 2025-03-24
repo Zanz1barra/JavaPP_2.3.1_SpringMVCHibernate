@@ -100,12 +100,14 @@
                             <td th:utext="${user.firstname}">Firstname</td>
                             <td th:utext="${user.lastname}">Lastname</td>
                             <td>
-                                <form th:action="@{/users/read_for_update(update_user_id=${user.getId()})}" th:object="${user}" th:method="get">
-                                    <button class="update_symbol"></button>
+                                <form th:action="@{/users/update}" th:object="${user}" th:method="get">
+                                    <input type="hidden" name="update_user_id" th:value="${user.id}"/>
+                                    <button class="update_symbol" type="submit"></button>
                                 </form>
                             </td>
                             <td>
-                                <form th:action="@{/users/delete(id=${user.getId()})}" th:method="post">
+                                <form th:action="@{/users/delete}" th:method="post">
+                                    <input type="hidden" name="id" th:value="${user.id}"/>
                                     <button class="remove_symbol"></button>
                                 </form>
                             </td>
@@ -119,7 +121,8 @@
                                 <td><button class="add_symbol" type="submit"></button></td>
                             </form>
                                 <td>
-                                    <form th:action="@{/users/delete(id=${user.getId()})}" th:method="post">
+                                    <form th:action="@{/users/delete}" th:method="post">
+                                        <input type="hidden" name="id" th:value="${user.id}"/>
                                         <button class="remove_symbol"></button>
                                     </form>
                                 </td>

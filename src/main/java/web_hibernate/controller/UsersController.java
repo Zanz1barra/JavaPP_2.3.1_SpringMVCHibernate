@@ -12,9 +12,6 @@ import java.util.Optional;
 import web_hibernate.entity.User;
 import web_hibernate.service.UserService;
 
-//TODO - над методами используй GetMapping и тд а не RequestMapping. его используй только над контроллером
-//     - имя метода getUsersList() не отвечает тому что он делает. если по id пользователь не найден - выкидывай эксепшн
-//     - prepareForUpdate() сделай ГЕТ
 @Controller
 @RequestMapping(value = {"/","/users"})
 public class UsersController {
@@ -26,13 +23,9 @@ public class UsersController {
     }
 
     @GetMapping(path = {"", "/", "/all"})
-    public String getUsersList(
-            @RequestParam(name = "update_user_id", required = false) Long beingUpdateUserId,
-            ModelMap modelMap) {
+    public String getUsersListWithFormForAddUser(ModelMap modelMap) {
         modelMap.addAttribute("usersList", userService.getUsersList());
-        Optional<User> beingUpdateUser = (beingUpdateUserId != null) ?
-                userService.getUserById(beingUpdateUserId) : Optional.of(new User());
-        modelMap.addAttribute("beingUpdateUser", beingUpdateUser.orElse(new User()));
+        modelMap.addAttribute("beingUpdateUser", new User());
         return "users";
     }
 
@@ -44,11 +37,17 @@ public class UsersController {
         return "redirect:/users/";
     }
 
-    @GetMapping(path = {"/read_for_update"})
-    public String prepareForUpdate(@RequestParam(name = "update_user_id") Long beingUpdateUserId,
-                                   ModelMap modelMap) {
-        // По неизвестной причине не получает передавать RequestParam в GET-запросе
-        return "redirect:/users?update_user_id=" + beingUpdateUserId;
+    @GetMapping(path = {"/update"})
+    public String getUsersListWithFormForUpdateUser(
+            @RequestParam(name = "update_user_id") Long beingUpdateUserId,
+            ModelMap modelMap) {
+        Optional<User> beingUpdateUser = userService.getUserById(beingUpdateUserId);
+        if (beingUpdateUser.isEmpty()) {
+            throw new IllegalArgumentException("No user found with requested ID");
+        }
+        modelMap.addAttribute("beingUpdateUser", beingUpdateUser.get());
+        modelMap.addAttribute("usersList", userService.getUsersList());
+        return "users";
     }
 
     @PostMapping(path = {"/add"})

@@ -1,15 +1,14 @@
 package web_hibernate.service;
 
 import org.springframework.stereotype.Service;
-import web_hibernate.entity.User;
-import web_hibernate.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
 
+import web_hibernate.entity.User;
+import web_hibernate.repository.UserRepository;
 
-// TODO - не инжекть репозиторий через поле - используй конструктор
-//      - повесь оверайд над всеми переопределенными методами
+
 @Service
 public class UserServiceImpl implements UserService {
 
