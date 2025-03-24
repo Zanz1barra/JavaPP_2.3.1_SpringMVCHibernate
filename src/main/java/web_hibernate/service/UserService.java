@@ -1,9 +1,9 @@
 package web_hibernate.service;
 
-import web_hibernate.entity.User;
-
 import java.util.List;
 import java.util.Optional;
+
+import web_hibernate.entity.User;
 
 public interface UserService {
     Optional<User> getUserById(Long id);
